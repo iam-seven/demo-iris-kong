@@ -4,7 +4,7 @@
 ### Joel Espinoza
 Sales Engineer Intersystems LAtam
 
-## **github: https://github.com/iam-seven/  | twitter: @joespinozaf**
+**github**: https://github.com/iam-seven/  | **twitter**: @joespinozaf
 ## version 1.0
 
 
