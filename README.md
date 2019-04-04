@@ -1,7 +1,7 @@
-## demo- iris-kong
-Demo for Intersystems IRIS 2019.1 + KONG & KONGA
+## Demo-iris-kong
+### Demo for Intersystems IRIS 2019.1 + KONG & KONGA
 
-#### by Joel Espinoza
+### by Joel Espinoza
 #### Sales Engineer LAtam
 
 ---
