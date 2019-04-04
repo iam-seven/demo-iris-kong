@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="DEMO.Productos">
+<Super>%Persistent</Super>
+
+<Property name="prodId">
+<Type>%String</Type>
+<SqlColumnNumber>2</SqlColumnNumber>
+</Property>
+
+<Property name="prodName">
+<Type>%String</Type>
+<SqlColumnNumber>3</SqlColumnNumber>
+</Property>
+
+<Property name="prodCost">
+<Type>%Numeric</Type>
+<SqlColumnNumber>4</SqlColumnNumber>
+</Property>
+
+<Property name="prodState">
+<Type>%String</Type>
+<SqlColumnNumber>5</SqlColumnNumber>
+</Property>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DataLocation>^DEMO.ProductosD</DataLocation>
+<DefaultData>ProductosDefaultData</DefaultData>
+<IdLocation>^DEMO.ProductosD</IdLocation>
+<IndexLocation>^DEMO.ProductosI</IndexLocation>
+<StreamLocation>^DEMO.ProductosS</StreamLocation>
+<Data name="ProductosDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>prodId</Value>
+</Value>
+<Value name="3">
+<Value>prodName</Value>
+</Value>
+<Value name="4">
+<Value>prodCost</Value>
+</Value>
+<Value name="5">
+<Value>prodState</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Class name="DEMO.Rest.Index">
+<Super>%CSP.REST</Super>
+
+<Parameter name="CONTENTTYPE">
+<Default>application/json</Default>
+</Parameter>
+
+<XData name="UrlMap">
+<XMLNamespace>http://www.intersystems.com/urlmap</XMLNamespace>
+<Data><![CDATA[
+		<Routes>
+			<Route Url="/productos" Method="GET" Call="DEMO.Rest.ServiciosProductos:Productos" Cors="false" />
+			<Route Url="/creaproducto" Method="POST" Call="DEMO.Rest.ServiciosProductos:CreaProducto" Cors="false" />
+		</Routes>]]></Data>
+</XData>
+</Class>
+<Class name="DEMO.Rest.ServiciosProductos">
+<Super>%CSP.REST</Super>
+
+<Parameter name="CONTENTTYPE">
+<Default>application/json</Default>
+</Parameter>
+
+<Method name="Productos">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+			set tSC = $System.Status.OK()
+			try {
+				set query = "select * from DEMO.Productos"	
+				set data = []
+				set rs = ##class(%SQL.Statement).%ExecDirect(,query)
+				while (rs.%Next()){
+					Do data.%Push({
+						"id":(rs.%Get("ID")),
+						"pid": (rs.%Get("prodId")),
+						"name": (rs.%Get("prodName")),
+						"cost": (rs.%Get("prodCost")),
+						"state": (rs.%Get("prodState"))
+					})
+				} 
+				w data.%ToJSON()
+			} catch (tException) {
+				zw tException
+			}
+		quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="CreaProducto">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+		#dim %request as %CSP.Request
+			try {
+				set tSC = $$$OK
+				set %response.ContentType="application/json"
+				set r = ##class(DEMO.Productos).%New()
+				set data = %request
+				set r.prodId = data.Data("prodId",1)
+				set r.prodName= data.Data("prodName",1)
+				set r.prodCost= data.Data("prodCost",1)
+				set r.prodState= data.Data("prodState",1)
+				set tSC = r.%Save()
+				if tSC {
+					w "OK! "_r.prodId
+				}			
+			} catch (tException) {
+				zw tException
+			}
+		quit tSC
+]]></Implementation>
+</Method>
+</Class>
+</Export>

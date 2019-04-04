@@ -1,0 +1,32 @@
+FROM ubuntu:latest
+
+EXPOSE 51773
+EXPOSE 52773
+EXPOSE 53773
+
+ENV ISC_PACKAGE_INSTANCENAME="IRIS"
+ENV ISC_PACKAGE_INSTALLDIR="/usr/irissys"
+ENV ISC_PACKAGE_INITIAL_SECURITY="Normal"
+ENV ISC_PACKAGE_MGRUSER="root" 
+ENV ISC_PACKAGE_MGRGROUP="root"
+ENV ISC_PACKAGE_USER_PASSWORD="pss.01"  
+ENV ISC_PACKAGE_CSPSYSTEM_PASSWORD="pss.01"
+ENV ISC_PACKAGE_IRISUSER="root"
+ENV ISC_PACKAGE_IRISGROUP="root"
+ENV ISC_PACKAGE_STARTIRIS="Y"
+
+RUN  mkdir /var/data && chmod 755 /var/data
+RUN  mkdir /var/share && chmod 755 /var/share
+
+RUN  apt-get update
+RUN  apt-get install net-tools
+
+ADD SHARED/IRIS-2019.1* /var/tmp/
+ADD licenses/IRIS.key /usr/irissys/mgr/iris.key
+RUN chmod -R 755 /var/tmp/IRIS-2019*
+RUN ./var/tmp/IRIS-2019*/irisinstall_silent
+RUN chmod -R 755 /usr/irissys/mgr/iris*
+
+
+
+ 
