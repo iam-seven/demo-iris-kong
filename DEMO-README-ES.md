@@ -1,12 +1,9 @@
 
 # DEMO IRIS  2019.1 + KONG + KONGA en Docker
 
-### **Joel  Espinoza F.**
-<<<<<<< HEAD
+### Joel Espinoza
 
 ##### Sales Engineer Intersystems LAtam
-=======
->>>>>>> b5633e29054e39f5477130503a7d04ba10fc5f47
 
 ### Sales Engineer Intersystems LAtam
 
