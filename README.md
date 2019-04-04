@@ -3,6 +3,8 @@
 
 ### by Joel Espinoza
 #### Sales Engineer LAtam
+##### joel.espinoza@intersystems.com
+
 
 ---
 
