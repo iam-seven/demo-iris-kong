@@ -2,11 +2,11 @@
 # DEMO IRIS  2019.1 + KONG + KONGA en Docker
 
 ### **Joel  Espinoza F.**   
-#### Sales Engineer Intersystems LAtam
+### Sales Engineer Intersystems LAtam
 
->##### **github: https://github.com/iam-seven/  | twitter: @joespinozaf**
+>### **github: https://github.com/iam-seven/  | twitter: @joespinozaf**
 >
->##### version 1.0
+>### version 1.0
 
 
 ---
