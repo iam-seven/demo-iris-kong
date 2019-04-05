@@ -3,6 +3,22 @@ networks:
   arkham:
     driver: bridge
 services:
+  irisdb:
+    hostname: irisdb
+    build:
+      context: .
+      dockerfile: Dockerfile-iris
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    ports:
+      - '51773:51773'
+      - '52773:52773'
+      - '53773:53773'
+    networks:
+      - arkham
+    volumes:
+      - './datairis:/var/data'
   db:
     image: 'postgres:9.5'
     environment:
@@ -24,12 +40,26 @@ services:
     networks:
       - arkham
     volumes:
-      - 'kong_data:/var/lib/postgresql/data'
-  kong:
-    image: '${KONG_DOCKER_TAG:-kong:1.1.0}'
-    container_name: kong
-    hostname: kong
+      - './kong_data:/var/lib/postgresql/data'
+  kong-migrations:
+    image: "${KONG_DOCKER_TAG:-kong:1.1.0}"
     command: kong migrations bootstrap
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_DATABASE: ${KONG_PG_DATABASE:-kong}
+      KONG_PG_HOST: db
+      KONG_PG_PASSWORD: ${KONG_PG_PASSWORD:-kong}
+      KONG_PG_USER: ${KONG_PG_USER:-kong}
+    links:
+      - db:db
+    networks:
+      - arkham
+    restart: on-failure
+  kong:
+    image: "${KONG_DOCKER_TAG:-kong:1.1.0}"
     depends_on:
       db:
         condition: service_healthy
@@ -39,22 +69,21 @@ services:
       KONG_ADMIN_LISTEN: '0.0.0.0:8001'
       KONG_CASSANDRA_CONTACT_POINTS: db
       KONG_DATABASE: postgres
-      KONG_PG_DATABASE: '${KONG_PG_DATABASE:-kong}'
+      KONG_PG_DATABASE: ${KONG_PG_DATABASE:-kong}
       KONG_PG_HOST: db
-      KONG_PG_PASSWORD: '${KONG_PG_PASSWORD:-kong}'
-      KONG_PG_USER: '${KONG_PG_USER:-kong}'
+      KONG_PG_PASSWORD: ${KONG_PG_PASSWORD:-kong}
+      KONG_PG_USER: ${KONG_PG_USER:-kong}
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
     networks:
       - arkham
     ports:
-      - '8000:8000/tcp'
-      - '8001:8001/tcp'
-      - '8443:8443/tcp'
-      - '8444:8444/tcp'
+      - "8000:8000/tcp"
+      - "8001:8001/tcp"
+      - "8443:8443/tcp"
+      - "8444:8444/tcp"
     restart: on-failure
   konga:
-    container_name: konga
     hostname: konga
     build:
       context: .
@@ -64,26 +93,6 @@ services:
     tty: true
     networks:
       - arkham
-  irisdb:
-    container_name: irisdb
-    hostname: irisdb
-    depends_on:
-      db:
-        condition: service_healthy
-    build:
-      context: .
-      dockerfile: Dockerfile-iris
-    restart: on-failure
-    stdin_open: true
-    tty: true
-    ports:
-      - '51773:51773'
-      - '52773:52773'
-      - '53773:53773'
-    networks:
-      - arkham
-    volumes:
-      - 'datairis:/var/data'
 volumes:
   kong_data: {}
   datairis:
