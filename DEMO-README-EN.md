@@ -54,7 +54,7 @@ ms
             * Kong:1.1.0
             * Konga:latest
             * Postgres:9.5
-    3. Postman u otro cliente de servicios.
+    3. Postman or other service Client.
     4. Eclipse con Plugin Atelier
 
 ## Detail of the Demo
@@ -64,9 +64,7 @@ ms
     
      Configure Kong and Konga and finally, what will allow to publish the services through the api manager.
 
-## 
-442/5000
-Download and generate the demo
+## Download and generate the demo
 
      Download the repository from Github, and follow the following steps:
 
