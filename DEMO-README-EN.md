@@ -55,7 +55,7 @@ ms
             * Konga:latest
             * Postgres:9.5
     3. Postman or other service Client.
-    4. Eclipse con Plugin Atelier
+    4. Eclipse with Atelier Plguin.
 
 ## Detail of the Demo
      The demo creates four Dockers containers: IRIS 2019.1, Kong, Konga and postgres (used by kong and konga). And it leaves all the services available to configure a complete environment.
